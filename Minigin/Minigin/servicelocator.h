@@ -16,7 +16,7 @@ namespace dae
 	public:
 		static SoundSystem& get_sound_system() { return *m_pSoundSystem; }
 		static void register_sound_system(SoundSystem* ss) { m_pSoundSystem = ss == nullptr ? &m_pDefaultSystem : ss; }
-
+		static void destroy_sound_system() { delete m_pSoundSystem; m_pSoundSystem = nullptr; }
 		static InputManager& get_input_manager() { return *m_pInputManager; }
 		static void register_input_manager(InputManager* im) { m_pInputManager = im; }
 

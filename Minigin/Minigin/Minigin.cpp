@@ -57,9 +57,10 @@ void dae::Minigin::Initialize()
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
-	//servicelocator::register_sound_system(new SoundSystem("../Data/"));
+
 	Renderer::GetInstance().Init(m_Window);
 	InputManager::GetInstance().Initialize();
+	//servicelocator::register_sound_system(new sdl_sound_system("../Data/"));
 }
 
 /**
@@ -98,9 +99,9 @@ void dae::Minigin::LoadGame() const
 
 void dae::Minigin::Cleanup()
 {
-	servicelocator::get_sound_system().Cleanup();
-	delete _soundSystem;
-	_soundSystem = nullptr;
+	//servicelocator::get_sound_system().Cleanup();
+	//servicelocator::destroy_sound_system();
+
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
@@ -116,8 +117,6 @@ void dae::Minigin::Run()
 
 	LoadGame();
 
-	_soundSystem = new sdl_sound_system("../Data/");
-	servicelocator::register_sound_system(_soundSystem);
 
 	{
 		auto fps = std::make_shared<FPSComponent>();
@@ -125,6 +124,8 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
+
+
 		servicelocator::register_input_manager(&input);
 		servicelocator::register_renderer(&renderer);
 

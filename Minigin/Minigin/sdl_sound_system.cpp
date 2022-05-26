@@ -11,7 +11,7 @@ dae::sdl_sound_system::sdl_sound_system(const std::string& path)
 }
 void  dae::sdl_sound_system::Cleanup()
 {
-	m_IsStopping = true;
+	
 	for (auto& audio : m_pSoundList)
 	{
 		Mix_FreeChunk(audio.soundTrack);
@@ -22,9 +22,15 @@ void  dae::sdl_sound_system::Cleanup()
 		Mix_FreeMusic(song.musicTrack);
 		song.EmptyMusic();
 	}
-	m_Thread.join();
+	m_SoundQueue.clear();
+	m_MusicQueue.clear();
+
 	Mix_Quit();
 	Mix_CloseAudio();
+
+	m_IsStopping = true;
+	m_Thread.join();
+
 }
 
 void dae::sdl_sound_system::PlaySound(const sound_id m_Id, int volume)
@@ -114,7 +120,7 @@ void  dae::sdl_sound_system::AddMusicClip(std::string path, bool loop)
 
 void dae::sdl_sound_system::Update()
 {
-	while (!m_IsStopping);
+	while (m_IsStopping);
 	{
 		std::unique_lock<std::mutex> mutexUniqueLock{ m_SoundMutex };
 		std::unique_lock<std::mutex> mutexSongUniqueLock{ m_SongMutex };
@@ -146,6 +152,7 @@ void dae::sdl_sound_system::Update()
 		}
 
 	}
+	std::cout << "ended";
 }
 
 
