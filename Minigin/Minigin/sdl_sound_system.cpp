@@ -7,11 +7,11 @@ dae::sdl_sound_system::sdl_sound_system(const std::string& path)
 	: m_path{ path }, m_Volume{ 2 }, m_IsStopping{ false }
 {
 	Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
-	m_Thread = std::thread(&sdl_sound_system::Update, this);
+	//m_Thread = std::thread(&sdl_sound_system::Update, this);
 }
 void  dae::sdl_sound_system::Cleanup()
 {
-	
+
 	for (auto& audio : m_pSoundList)
 	{
 		Mix_FreeChunk(audio.soundTrack);
@@ -29,29 +29,29 @@ void  dae::sdl_sound_system::Cleanup()
 	Mix_CloseAudio();
 
 	m_IsStopping = true;
-	m_Thread.join();
+	//m_Thread.join();
 
 }
 
 void dae::sdl_sound_system::PlaySound(const sound_id m_Id, int volume)
 {
-	auto soundNr = m_pSoundList[m_Id];
+	auto& soundNr = m_pSoundList[m_Id];
 	soundNr.volume = volume;
 
 	m_SoundQueue.emplace_back(soundNr);
-	std::lock_guard<std::mutex> mutexLock{ m_SoundMutex };
-	m_SoundConditionalVariable.notify_one();
+	//std::lock_guard<std::mutex> mutexLock{ m_SoundMutex };
+	//m_SoundConditionalVariable.notify_one();
 
 }
 
 void dae::sdl_sound_system::PlayMusic(const sound_id m_Id, int volume)
 {
-	auto songNr = m_pSongList[m_Id];
+	auto& songNr = m_pSongList[m_Id];
 	songNr.volume = volume;
 
 	m_MusicQueue.emplace_back(songNr);
-	std::lock_guard<std::mutex> mutexLock{ m_SongMutex };
-	m_SongConditionalVariable.notify_one();
+	//std::lock_guard<std::mutex> mutexLock{ m_SongMutex };
+	//m_SongConditionalVariable.notify_one();
 }
 void dae::sdl_sound_system::AddAudioClip(std::string path)
 {
@@ -70,7 +70,7 @@ void dae::sdl_sound_system::AddAudioClip(std::string path)
 			sound_nr.soundTrack = sound;
 			sound_nr.soundPath = fullpath;
 
-			std::lock_guard<std::mutex> mutexLock{ m_SoundMutex };
+			//std::lock_guard<std::mutex> mutexLock{ m_SoundMutex };
 			m_pSoundList.emplace_back(sound_nr);
 			m_path = temp;
 		}
@@ -103,7 +103,7 @@ void  dae::sdl_sound_system::AddMusicClip(std::string path, bool loop)
 			song_nr.songPath = fullpath;
 			song_nr.loop = (loop) ? -1 : 0;
 
-			std::lock_guard<std::mutex> mutexLock{ m_SongMutex };
+			//std::lock_guard<std::mutex> mutexLock{ m_SongMutex };
 			m_pSongList.emplace_back(song_nr);
 			m_path = temp;
 		}
@@ -120,14 +120,14 @@ void  dae::sdl_sound_system::AddMusicClip(std::string path, bool loop)
 
 void dae::sdl_sound_system::Update()
 {
-	while (m_IsStopping);
+	while (!m_IsStopping);
 	{
-		std::unique_lock<std::mutex> mutexUniqueLock{ m_SoundMutex };
-		std::unique_lock<std::mutex> mutexSongUniqueLock{ m_SongMutex };
+		//std::unique_lock<std::mutex> mutexUniqueLock{ m_SoundMutex };
+		//std::unique_lock<std::mutex> mutexSongUniqueLock{ m_SongMutex };
 
 		if (!m_SoundQueue.empty() && Mix_PlayingMusic == 0)
 		{
-			auto currentSound = m_SoundQueue.front();
+			auto& currentSound = m_SoundQueue.front();
 			m_SoundQueue.pop_front();
 
 			Mix_VolumeChunk(m_pSoundList[currentSound.m_Id].soundTrack, currentSound.volume);
@@ -137,19 +137,19 @@ void dae::sdl_sound_system::Update()
 
 		if (!m_MusicQueue.empty())
 		{
-			auto currentSong = m_MusicQueue.front();
+			auto& currentSong = m_MusicQueue.front();
 			m_MusicQueue.pop_front();
 			Mix_PlayMusic(m_pSongList[currentSong.m_Id].musicTrack, currentSong.loop);
 		}
-		else
-		{
-			m_SongConditionalVariable.wait(mutexSongUniqueLock);
-		}
+		/*	else
+			{
+				m_SongConditionalVariable.wait(mutexSongUniqueLock);
+			}*/
 
-		if (m_SoundQueue.empty() && m_IsStopping)
-		{
-			m_SoundConditionalVariable.wait(mutexUniqueLock);
-		}
+			/*	if (m_SoundQueue.empty() && m_IsStopping)
+				{
+					m_SoundConditionalVariable.wait(mutexUniqueLock);
+				}*/
 
 	}
 	std::cout << "ended";

@@ -60,7 +60,7 @@ void dae::Minigin::Initialize()
 
 	Renderer::GetInstance().Init(m_Window);
 	InputManager::GetInstance().Initialize();
-	//servicelocator::register_sound_system(new sdl_sound_system("../Data/"));
+	servicelocator::register_sound_system(new sdl_sound_system("../Data/"));
 }
 
 /**
@@ -99,9 +99,7 @@ void dae::Minigin::LoadGame() const
 
 void dae::Minigin::Cleanup()
 {
-	//servicelocator::get_sound_system().Cleanup();
-	//servicelocator::destroy_sound_system();
-
+	servicelocator::destroy_sound_system();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;

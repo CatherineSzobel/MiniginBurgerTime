@@ -41,12 +41,12 @@ namespace dae
 		std::deque<Sound_Nr> m_SoundQueue;
 		std::deque<Song_Nr> m_MusicQueue;
 
-		std::mutex m_SoundMutex;
-		std::mutex m_SongMutex;
+		//std::mutex m_SoundMutex;
+		//std::mutex m_SongMutex;
 
-		std::condition_variable m_SoundConditionalVariable;
-		std::condition_variable m_SongConditionalVariable;
-		std::thread m_Thread;
+		//std::condition_variable m_SoundConditionalVariable;
+		//std::condition_variable m_SongConditionalVariable;
+		//std::thread m_Thread;
 
 	};
 
