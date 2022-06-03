@@ -44,6 +44,7 @@ bool dae::Controller::IsKeyUp(SDL_Keycode key) const
 
 bool dae::Controller::isKeyPressed(SDL_Keycode key) const
 {
+	
 	return pImpl->isKeyPressed(key);
 }
 
@@ -136,9 +137,7 @@ void dae::Controller::ControllerImpl::Update()
 
 	if (m_IsKeyboardEnabled)
 	{
-		auto keyChanges = m_CurrentStateKey ^ m_PreviousStateKey;
-		keyPressedThisFrame = keyChanges & m_CurrentState.Gamepad.wButtons;
-		keyReleasedThisFrame = keyChanges & (~m_CurrentState.Gamepad.wButtons);
+	
 	}
 
 }
@@ -161,15 +160,15 @@ bool dae::Controller::ControllerImpl::IsPressed(unsigned int button) const
 bool dae::Controller::ControllerImpl::IsKeyDown(unsigned int key) const
 {
 
-	return (keyPressedThisFrame & static_cast<int>(key)) != 0;
+	return GetKeyState(key) & 0x8000;;
 }
 
 bool dae::Controller::ControllerImpl::IsKeyUp(unsigned int key) const
 {
-	return (keyReleasedThisFrame & static_cast<int>(key)) != 0;
+	return 	~GetKeyState(key) & 0x8000;
 }
 
 bool dae::Controller::ControllerImpl::isKeyPressed(unsigned int key) const
 {
-	return  (m_CurrentStateKey & static_cast<int>(key)) != 0;
+	return GetKeyState(key) & 0x8000;
 }

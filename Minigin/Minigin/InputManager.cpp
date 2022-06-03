@@ -22,7 +22,6 @@ void dae::InputManager::Initialize()
 			{
 				//Controller is connected
 				m_pControllers.emplace_back(new Controller(i));
-				++m_CurrentAmountOfPlayers;
 			}
 			else
 			{
@@ -45,6 +44,19 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 		ImGui_ImplSDL2_ProcessEvent(&e);
+		for (auto& command : m_KeyButtons)
+		{
+			if (e.key.keysym.sym == SDLK_q)
+			{
+				if (e.key.keysym.sym == command.first)
+				{
+					command.second.get()->Execute();
+					break;
+				}
+			}
+		
+
+		}
 	}
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
@@ -54,7 +66,11 @@ bool dae::InputManager::ProcessInput()
 		ProcessControllerInput();
 
 	}
-	ProcessKeyboardInput();
+	//if (m_EnableKeyboard)
+	//{
+	//	ProcessKeyboardInput();
+	//}
+
 	return true;
 }
 
@@ -84,8 +100,10 @@ void dae::InputManager::ProcessKeyboardInput()
 			if (controller->IsKeyDown(command.first))
 			{
 				command.second.get()->Execute();
+				controller->isKeyPressed(command.first);
 				break;
 			}
+
 		}
 	}
 }
@@ -98,6 +116,7 @@ void dae::InputManager::BindControllerCommand(ControllerButton button, Command* 
 void dae::InputManager::BindKeyboardCommand(int keyboard, Command* command)
 {
 	m_KeyButtons.emplace(keyboard, std::unique_ptr<Command>(command));
+
 }
 
 

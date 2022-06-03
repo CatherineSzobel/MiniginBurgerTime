@@ -129,7 +129,8 @@ void dae::Minigin::Run()
 		servicelocator::register_renderer(&renderer);
 
 		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonA, new JumpCommand());
-		servicelocator::get_input_manager().BindKeyboardCommand('q', new JumpCommand());
+		servicelocator::get_input_manager().BindKeyboardCommand('Q', new JumpCommand());
+		servicelocator::get_input_manager().BindKeyboardCommand('W', new FireCommand());
 		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonB, new FireCommand());
 
 
