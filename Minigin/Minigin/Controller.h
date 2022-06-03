@@ -13,28 +13,39 @@ namespace dae
 		class ControllerImpl final
 		{
 		public:
-			ControllerImpl(unsigned int controllerID);
+			ControllerImpl(unsigned int controllerID, bool keyboard = false);
 			void Update();
 
 			bool IsDownThisFrame(unsigned int button) const;
 			bool IsUpThisFrame(unsigned int button) const;
 			bool IsPressed(unsigned int button) const;
 
+			bool IsKeyDown(unsigned int key) const;
+			bool IsKeyUp(unsigned int key) const;
+			bool isKeyPressed(unsigned int key) const;
 
 		private:
 
 			XINPUT_STATE m_CurrentState{};
 			XINPUT_STATE m_PreviousState{};
+
+			bool m_IsKeyboardEnabled{ false };
+			BYTE m_CurrentStateKey{};
+			BYTE m_PreviousStateKey{};
+
 			XINPUT_KEYSTROKE m_CurrentKeyStroke{};
 
 			int m_ControllerIndex{ 0 };
 			WORD buttonPressedThisFrame{ 0 };
 			WORD buttonReleasedThisFrame{ 0 };
+
+			WORD keyPressedThisFrame{ 0 };
+			WORD keyReleasedThisFrame{ 0 };
 		};
 
 	public:
 
-		Controller(int controllerID);
+		Controller(int controllerID, bool keyboard = false);
 		virtual ~Controller();
 		Controller(const Controller& other) = delete;
 		Controller(Controller&& other) = delete;
@@ -47,6 +58,10 @@ namespace dae
 		bool IsDown(ControllerButton button) const;
 		bool IsUp(ControllerButton button) const;
 		bool IsPressed(ControllerButton button) const;
+
+		bool IsKeyDown(SDL_Keycode key) const;
+		bool IsKeyUp(SDL_Keycode key) const;
+		bool isKeyPressed(SDL_Keycode key) const;
 
 	private:
 		//void DeadzoneLeftThumbstick();

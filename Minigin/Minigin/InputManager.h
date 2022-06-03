@@ -23,7 +23,11 @@ namespace dae
 
 		void Initialize();
 		bool ProcessInput();
-		void BindCommand(ControllerButton button, Command* command);
+		void ProcessControllerInput();
+		void ProcessKeyboardInput();
+		void BindControllerCommand(ControllerButton button, Command* command);
+		void BindKeyboardCommand(int keyboard, Command* command);
+		void SetKeyboardEnabled(bool enable) { m_EnableKeyboard = enable; }
 	private:
 
 		XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT];
@@ -34,7 +38,12 @@ namespace dae
 		using ControllerCommandsMap = std::map<ControllerButton, std::unique_ptr<Command>>;
 		ControllerCommandsMap m_ConsoleButtons{};
 
+		using KeyboardCommandsMap = std::map<int, std::unique_ptr<Command>>;
+		KeyboardCommandsMap m_KeyButtons{};
+
 		std::vector<std::unique_ptr<Controller>> m_pControllers{};
+		bool m_EnableKeyboard{ false };
+		int	m_CurrentAmountOfPlayers{ 0 };
 	};
 
 }

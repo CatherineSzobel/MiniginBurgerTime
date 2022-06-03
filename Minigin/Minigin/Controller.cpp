@@ -3,9 +3,9 @@
 
 
 //Controller
-dae::Controller::Controller(int controllerID)
+dae::Controller::Controller(int controllerID, bool keyboard)
 {
-	pImpl = new ControllerImpl(controllerID);
+	pImpl = new ControllerImpl(controllerID, keyboard);
 }
 dae::Controller::~Controller()
 {
@@ -30,6 +30,21 @@ bool dae::Controller::IsUp(ControllerButton button) const
 bool dae::Controller::IsPressed(ControllerButton button) const
 {
 	return pImpl->IsPressed(static_cast<unsigned int>(button));
+}
+
+bool dae::Controller::IsKeyDown(SDL_Keycode key) const
+{
+	return pImpl->IsKeyDown(key);
+}
+
+bool dae::Controller::IsKeyUp(SDL_Keycode key) const
+{
+	return pImpl->IsKeyUp(key);
+}
+
+bool dae::Controller::isKeyPressed(SDL_Keycode key) const
+{
+	return pImpl->isKeyPressed(key);
 }
 
 //void dae::Controller::DeadzoneLeftThumbstick()
@@ -101,7 +116,8 @@ bool dae::Controller::IsPressed(ControllerButton button) const
 
 
 //Implementation
-dae::Controller::ControllerImpl::ControllerImpl(unsigned int controllerID)
+dae::Controller::ControllerImpl::ControllerImpl(unsigned int controllerID, bool keyboard)
+	:m_IsKeyboardEnabled{ keyboard }
 {
 	ZeroMemory(&m_PreviousState, sizeof(XINPUT_STATE));
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
@@ -118,6 +134,13 @@ void dae::Controller::ControllerImpl::Update()
 	buttonPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
 	buttonReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
 
+	if (m_IsKeyboardEnabled)
+	{
+		auto keyChanges = m_CurrentStateKey ^ m_PreviousStateKey;
+		keyPressedThisFrame = keyChanges & m_CurrentState.Gamepad.wButtons;
+		keyReleasedThisFrame = keyChanges & (~m_CurrentState.Gamepad.wButtons);
+	}
+
 }
 
 bool dae::Controller::ControllerImpl::IsDownThisFrame(unsigned int button) const
@@ -133,4 +156,20 @@ bool dae::Controller::ControllerImpl::IsUpThisFrame(unsigned int button) const
 bool dae::Controller::ControllerImpl::IsPressed(unsigned int button) const
 {
 	return  ((m_CurrentState.Gamepad.wButtons & static_cast<int>(button)) != 0);
+}
+
+bool dae::Controller::ControllerImpl::IsKeyDown(unsigned int key) const
+{
+
+	return (keyPressedThisFrame & static_cast<int>(key)) != 0;
+}
+
+bool dae::Controller::ControllerImpl::IsKeyUp(unsigned int key) const
+{
+	return (keyReleasedThisFrame & static_cast<int>(key)) != 0;
+}
+
+bool dae::Controller::ControllerImpl::isKeyPressed(unsigned int key) const
+{
+	return  (m_CurrentStateKey & static_cast<int>(key)) != 0;
 }

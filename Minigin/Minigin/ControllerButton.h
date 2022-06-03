@@ -18,4 +18,15 @@ namespace dae
 		ButtonX = XINPUT_GAMEPAD_X,
 		ButtonY = XINPUT_GAMEPAD_Y
 	};
+	enum class InputState
+	{
+		pressed,
+		down,
+		released
+	};
+	struct InputCommand
+	{
+
+
+	};
 }

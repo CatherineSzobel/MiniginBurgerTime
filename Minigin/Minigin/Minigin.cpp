@@ -59,6 +59,7 @@ void dae::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+	InputManager::GetInstance().SetKeyboardEnabled(true);
 	InputManager::GetInstance().Initialize();
 	servicelocator::register_sound_system(new sdl_sound_system("../Data/"));
 }
@@ -122,13 +123,14 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
-
+		input.SetKeyboardEnabled(true);
 
 		servicelocator::register_input_manager(&input);
 		servicelocator::register_renderer(&renderer);
 
-		servicelocator::get_input_manager().BindCommand(ControllerButton::ButtonA, new JumpCommand());
-		servicelocator::get_input_manager().BindCommand(ControllerButton::ButtonB, new FireCommand());
+		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonA, new JumpCommand());
+		servicelocator::get_input_manager().BindKeyboardCommand('q', new JumpCommand());
+		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonB, new FireCommand());
 
 
 		// todo: this update loop could use some work.
