@@ -1,7 +1,7 @@
 #pragma once
 namespace dae
 {
-	enum class ControllerButton
+	enum class GamepadButton
 	{
 		DPadUp = XINPUT_GAMEPAD_DPAD_UP,
 		DPadDown = XINPUT_GAMEPAD_DPAD_DOWN,
@@ -23,10 +23,5 @@ namespace dae
 		pressed,
 		down,
 		released
-	};
-	struct InputCommand
-	{
-
-
 	};
 }

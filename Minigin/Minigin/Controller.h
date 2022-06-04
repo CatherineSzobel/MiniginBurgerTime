@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Command.h"
-#include "ControllerButton.h"
+#include "GamepadButton.h"
 namespace dae
 {
 	class Controller final
@@ -20,9 +20,6 @@ namespace dae
 			bool IsUpThisFrame(unsigned int button) const;
 			bool IsPressed(unsigned int button) const;
 
-			bool IsKeyDown(unsigned int key) const;
-			bool IsKeyUp(unsigned int key) const;
-			bool isKeyPressed(unsigned int key) const;
 
 		private:
 
@@ -30,11 +27,8 @@ namespace dae
 			XINPUT_STATE m_PreviousState{};
 
 			bool m_IsKeyboardEnabled{ false };
-			BYTE m_CurrentStateKey[256]{};
-			BYTE m_PreviousStateKey[256]{};
 
 			XINPUT_KEYSTROKE m_CurrentKeyStroke{};
-			XINPUT_KEYSTROKE m_PrevKeyStroke{};
 
 			int m_ControllerIndex{ 0 };
 			WORD buttonPressedThisFrame{ 0 };
@@ -56,13 +50,9 @@ namespace dae
 		void Update();
 
 
-		bool IsDown(ControllerButton button) const;
-		bool IsUp(ControllerButton button) const;
-		bool IsPressed(ControllerButton button) const;
-
-		bool IsKeyDown(SDL_Keycode key) const;
-		bool IsKeyUp(SDL_Keycode key) const;
-		bool isKeyPressed(SDL_Keycode key) const;
+		bool IsDown(GamepadButton button) const;
+		bool IsUp(GamepadButton button) const;
+		bool IsPressed(GamepadButton button) const;
 
 	private:
 		//void DeadzoneLeftThumbstick();

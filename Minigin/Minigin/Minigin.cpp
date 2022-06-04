@@ -128,10 +128,10 @@ void dae::Minigin::Run()
 		servicelocator::register_input_manager(&input);
 		servicelocator::register_renderer(&renderer);
 
-		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonA, new JumpCommand());
-		servicelocator::get_input_manager().BindKeyboardCommand('Q', new JumpCommand());
-		servicelocator::get_input_manager().BindKeyboardCommand('W', new FireCommand());
-		servicelocator::get_input_manager().BindControllerCommand(ControllerButton::ButtonB, new FireCommand());
+		servicelocator::get_input_manager().BindGamepadCommand(GamepadButton::ButtonA, InputState::pressed, new JumpCommand());
+		servicelocator::get_input_manager().BindKeyboardCommand(SDLK_q, InputState::pressed, new JumpCommand());
+		servicelocator::get_input_manager().BindKeyboardCommand(SDLK_w, InputState::down, new FireCommand());
+		servicelocator::get_input_manager().BindGamepadCommand(GamepadButton::ButtonB, InputState::down, new FireCommand());
 
 
 		// todo: this update loop could use some work.

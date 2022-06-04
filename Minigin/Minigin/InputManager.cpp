@@ -5,34 +5,31 @@
 void dae::InputManager::Initialize()
 {
 	//keyboard
-	if (m_EnableKeyboard)
-	{
-		m_pControllers.emplace_back(new Controller(0, true));
-	}
+
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
-		if (m_pControllers[i] != nullptr)
+		if (m_EnableKeyboard)
+		{
+			m_pControllers.emplace_back(new Controller(0, true));
+			++i;
+		}
+		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
+
+		auto dwResult = XInputGetState(i, &m_CurrentState[i]);
+
+		//determine if the controller is connected
+		if (dwResult == ERROR_SUCCESS)
+		{
+			//Controller is connected
+			m_pControllers.emplace_back(new Controller(i));
+		}
+		else
 		{
 			ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
-
-			auto dwResult = XInputGetState(i, &m_CurrentState[i]);
-
-			//determine if the controller is connected
-			if (dwResult == ERROR_SUCCESS)
-			{
-				//Controller is connected
-				m_pControllers.emplace_back(new Controller(i));
-			}
-			else
-			{
-				ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
-				break;
-				//Controller is not connected
-			}
+			break;
+			//Controller is not connected
 		}
-
 	}
-
 }
 
 bool dae::InputManager::ProcessInput()
@@ -44,42 +41,33 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 		ImGui_ImplSDL2_ProcessEvent(&e);
-		for (auto& command : m_KeyButtons)
-		{
-			if (e.key.keysym.sym == SDLK_q)
-			{
-				if (e.key.keysym.sym == command.first)
-				{
-					command.second.get()->Execute();
-					break;
-				}
-			}
-		
 
+		if (m_EnableKeyboard)
+		{
+			ProcessKeyboardInput(e);
 		}
+
 	}
+
+
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 
 		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
 		XInputGetState(i, &m_CurrentState[i]);
-		ProcessControllerInput();
+		ProcessGamepadInput();
 
 	}
-	//if (m_EnableKeyboard)
-	//{
-	//	ProcessKeyboardInput();
-	//}
 
 	return true;
 }
 
-void dae::InputManager::ProcessControllerInput()
+void dae::InputManager::ProcessGamepadInput()
 {
 	for (auto& controller : m_pControllers)
 	{
 		controller->Update();
-		for (auto& command : m_ConsoleButtons)
+		for (auto& command : m_GamepadButtons)
 		{
 			if (controller->IsDown(command.first))
 			{
@@ -90,33 +78,67 @@ void dae::InputManager::ProcessControllerInput()
 	}
 }
 
-void dae::InputManager::ProcessKeyboardInput()
+void dae::InputManager::ProcessKeyboardInput(SDL_Event& e)
 {
-	for (auto& controller : m_pControllers)
+	switch (e.type)
 	{
-		controller->Update();
+
+	case SDL_KEYDOWN:
 		for (auto& command : m_KeyButtons)
 		{
-			if (controller->IsKeyDown(command.first))
+			if (command.second == InputState::down)
 			{
-				command.second.get()->Execute();
-				controller->isKeyPressed(command.first);
-				break;
+				if (e.key.keysym.sym == command.first.first)
+				{
+					command.first.second.get()->Execute();
+					break;
+				}
 			}
-
 		}
+		break;
+
+	case SDL_KEYUP:
+		for (auto& command : m_KeyButtons)
+		{
+
+			m_PreviousKey = false;
+
+			if (command.second == InputState::released)
+			{
+				if (e.key.keysym.sym == command.first.first)
+				{
+					command.first.second.get()->Execute();
+					break;
+				}
+			}
+		}
+
+	default:
+		for (auto& command : m_KeyButtons)
+		{
+			if (command.second == InputState::pressed)
+			{
+				if (e.key.keysym.sym == command.first.first && !m_PreviousKey)
+				{
+					m_PreviousKey = true;
+					command.first.second.get()->Execute();
+					break;
+				}
+			}
+		}
+		break;
 	}
 }
 
-void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command)
+void dae::InputManager::BindGamepadCommand(GamepadButton button, InputState, Command* command)
 {
-	m_ConsoleButtons.emplace(button, std::unique_ptr<Command>(command));
+	m_GamepadButtons.emplace(button, std::unique_ptr<Command>(command));
 }
 
-void dae::InputManager::BindKeyboardCommand(int keyboard, Command* command)
+void dae::InputManager::BindKeyboardCommand(SDL_Keycode keyboard, InputState state, Command* command)
 {
-	m_KeyButtons.emplace(keyboard, std::unique_ptr<Command>(command));
-
+	m_KeyButtons[std::make_pair(keyboard, std::unique_ptr<Command>(command))] = state;
+	//m_KeyButtons.emplace(keyboard, std::unique_ptr<Command>(command));
 }
 
 

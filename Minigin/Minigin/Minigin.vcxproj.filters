@@ -177,7 +177,7 @@
     <ClInclude Include="TrackType.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="ControllerButton.h">
+    <ClInclude Include="GamepadButton.h">
       <Filter>Header Files\Managers\Input</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">

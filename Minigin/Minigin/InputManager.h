@@ -7,7 +7,7 @@
 #include <memory>
 #include <map>
 #include "Controller.h"
-#include "ControllerButton.h"
+#include "GamepadButton.h"
 namespace dae
 {
 
@@ -23,10 +23,10 @@ namespace dae
 
 		void Initialize();
 		bool ProcessInput();
-		void ProcessControllerInput();
-		void ProcessKeyboardInput();
-		void BindControllerCommand(ControllerButton button, Command* command);
-		void BindKeyboardCommand(int keyboard, Command* command);
+		void ProcessGamepadInput();
+		void ProcessKeyboardInput(SDL_Event& e);
+		void BindGamepadCommand(GamepadButton button, InputState state, Command* command);
+		void BindKeyboardCommand(SDL_Keycode keyboard, InputState state, Command* command);
 		void SetKeyboardEnabled(bool enable) { m_EnableKeyboard = enable; }
 	private:
 
@@ -35,15 +35,17 @@ namespace dae
 
 		//XINPUT_KEYSTROKE m_CurrentKeyStroke[XUSER_MAX_COUNT];
 
-		using ControllerCommandsMap = std::map<ControllerButton, std::unique_ptr<Command>>;
-		ControllerCommandsMap m_ConsoleButtons{};
+		using ControllerCommandsMap = std::map<GamepadButton, std::unique_ptr<Command>>;
+		ControllerCommandsMap m_GamepadButtons{};
 
-		using KeyboardCommandsMap = std::map<int, std::unique_ptr<Command>>;
+		using KeyboardCommandsMap = std::map<std::pair<SDL_Keycode, std::unique_ptr<Command>>, InputState>;
+		//using KeyboardCommandsMap = std::map<SDL_Keycode, std::unique_ptr<Command>>;
 		KeyboardCommandsMap m_KeyButtons{};
 
 		std::vector<std::unique_ptr<Controller>> m_pControllers{};
 		bool m_EnableKeyboard{ false };
 		int	m_CurrentAmountOfPlayers{ 0 };
+		bool m_PreviousKey{false};
 	};
 
 }
