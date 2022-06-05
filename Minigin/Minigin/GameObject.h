@@ -16,6 +16,7 @@ namespace dae
 		void Initialize();
 		void SetParent(GameObject* parent) { m_Parent = parent; }
 		GameObject* GetParent() const { return m_Parent; }
+		Transform GetTransform() const { return m_Transform;}
 
 		size_t GetChildCount() const { return m_Children.size(); };
 		GameObject* GetChildAt(int index) const { return m_Children[index]; };
@@ -30,19 +31,6 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-		// adding component using templates
-		// using smart pointers
-		template<class Type>
-		void AddComponent(Type* newComponent);
-
-		template<class Type>
-		Type* GetComponent(Type* newComponent) const;
-
-		template<class Type>
-		void  RemoveComponent(Type* componentToDelete);
-
-
-		//using pointers
 		template<class Type>
 		Type* AddComponent();
 
@@ -57,11 +45,10 @@ namespace dae
 		std::vector<GameObject*> m_Children{};
 
 	private:
+		Transform m_Transform;
 		std::vector<BaseComponent*> m_pComponents{};
 
 	};
-#pragma region Template
-
 
 
 	template<class Type>
@@ -71,12 +58,6 @@ namespace dae
 		m_pComponents.push_back(result);
 		return result;
 	}
-	template<class Type>
-	void GameObject::AddComponent(Type* newComponent)
-	{
-		m_pComponents.push_back(newComponent);
-	}
-
 	template<class Type>
 	inline Type* GameObject::GetComponent() const
 	{
@@ -89,21 +70,6 @@ namespace dae
 		}
 		return nullptr;
 	}
-
-	template<class Type>
-	Type* GameObject::GetComponent(Type* newComponent) const
-	{
-		for (const auto& component : m_pComponents)
-		{
-			if (newComponent == component)
-			{
-				return newComponent;
-			}
-		}
-		return nullptr;
-
-	}
-
 	template<class Type>
 	inline void GameObject::RemoveComponent()
 	{
@@ -112,12 +78,5 @@ namespace dae
 		const auto it = std::find(m_pComponents.begin(), m_pComponents.end(), result);
 		m_pComponents.erase(it);
 	}
-	template<class Type>
-	void GameObject::RemoveComponent(Type* componentToDelete)
-	{
-		const auto it = std::find(m_pComponents.begin(), m_pComponents.end(), componentToDelete);
-		m_pComponents.erase(it);
-	}
-#pragma endregion
 
 }

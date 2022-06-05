@@ -4,7 +4,6 @@ using sound_id = unsigned short;
 
 struct Sound_Nr
 {
-
 	Sound_Nr(std::string soundpath)
 		:soundPath{ soundpath }, soundTrack{ nullptr }, volume{}, m_Id{}{}
 	Sound_Nr()

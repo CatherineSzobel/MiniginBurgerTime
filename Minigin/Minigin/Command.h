@@ -18,6 +18,7 @@ namespace dae
 	{
 	public:
 		void Execute() override { std::cout << "Jump!"; }
+		
 	};
 
 	class DuckCommand final : public Command

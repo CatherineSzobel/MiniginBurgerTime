@@ -13,7 +13,7 @@ namespace dae
 		Time& operator=(const Time& other) = delete;
 		Time& operator=(Time&& other) = delete;
 
-		float GetElapsedTime() const{ return m_DeltaTime; }
+		float GetElapsedTime() const { return m_DeltaTime; }
 		float m_DeltaTime;
 	private:
 		static Time* m_Instance;

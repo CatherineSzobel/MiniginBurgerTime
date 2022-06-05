@@ -8,7 +8,6 @@ namespace dae
 	class GameObject;
 	class BaseComponent
 	{
-		GameObject* m_pOwner;
 	public:
 
 		virtual void Initialize() = 0;
@@ -24,9 +23,13 @@ namespace dae
 		BaseComponent(BaseComponent&& other) = delete;
 		BaseComponent& operator=(const BaseComponent& other) = delete;
 		BaseComponent& operator=(BaseComponent&& other) = delete;
+
+		void SetCurrentGameObject(GameObject* gameobject) { m_pOwner = gameobject; }
+		GameObject* GetOwner() const { return m_pOwner; }
+		GameObject* m_pOwner;
 	protected:
 		explicit BaseComponent(GameObject* pOwner) : m_pOwner(pOwner) {}
-		GameObject* GetOwner() const { return m_pOwner; }
+
 	};
 }
 

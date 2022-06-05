@@ -114,6 +114,9 @@
       <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -135,6 +138,9 @@
       <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -160,6 +166,9 @@
       <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -185,6 +194,9 @@
       <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\3rdParty\imgui-1.87\backends\imgui_impl_opengl2.h" />
@@ -196,6 +208,7 @@
     <ClInclude Include="..\3rdParty\imgui-1.87\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.87\imstb_truetype.h" />
     <ClInclude Include="..\3rdParty\imgui-1.87\include\imgui_plot.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Controller.h" />
@@ -225,6 +238,7 @@
     <ClInclude Include="servicelogger.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundSystem.h" />
+    <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
@@ -289,6 +303,7 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level3</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Level3</WarningLevel>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Controller.cpp" />
@@ -320,6 +335,7 @@
     <ClCompile Include="servicelocator.cpp" />
     <ClCompile Include="servicelogger.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />

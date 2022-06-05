@@ -95,3 +95,8 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
+void dae::Renderer::RenderTexture(const Texture2D& texture, SDL_Rect srcRect, SDL_Rect dstRect) const
+{
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect, 0.f, nullptr, SDL_FLIP_NONE);
+}
+

@@ -133,6 +133,8 @@ void dae::Minigin::Run()
 		servicelocator::get_input_manager().BindKeyboardCommand(SDLK_w, InputState::down, new FireCommand());
 		servicelocator::get_input_manager().BindGamepadCommand(GamepadButton::ButtonB, InputState::down, new FireCommand());
 
+		//servicelocator::get_sound_system().AddMusicClip("BackgroundMusic.mp3",false);
+		//servicelocator::get_sound_system().PlayMusic(0, 3);
 
 		// todo: this update loop could use some work.
 		high_resolution_clock::time_point previousTime = high_resolution_clock::now();

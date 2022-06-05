@@ -55,10 +55,6 @@ void dae::GameObject::Initialize()
 void dae::GameObject::RemoveChild(int index)
 {
 	const auto it = std::find(m_Children.begin(), m_Children.end(), m_Children[index]);
-	if (it == m_Children.end())
-	{
-		return;
-	}
 	m_Children[index]->m_Parent = nullptr;
 	m_Children.erase(it);
 
@@ -67,10 +63,6 @@ void dae::GameObject::RemoveChild(int index)
 void dae::GameObject::RemoveChild(GameObject* child)
 {
 	const auto it = std::find(m_Children.begin(), m_Children.end(), child);
-	if (it == m_Children.end())
-	{
-		return;
-	}
 	m_Children.erase(it);
 	child->m_Parent = nullptr;
 }

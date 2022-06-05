@@ -9,7 +9,6 @@ void dae::servicelogger::Cleanup()
 
 void dae::servicelogger::PlaySound(const sound_id m_Id, int volume)
 {
-
 	std::cout << "playing sound id " << m_Id << " at volume" << volume << " \n";
 }
 
@@ -32,6 +31,5 @@ void dae::servicelogger::SetVolume(int volume)
 
 void dae::servicelogger::PlayMusic(const sound_id m_Id, int volume)
 {
-
 	std::cout << "playing song id " << m_Id << " at volume" << volume << " \n";
 }

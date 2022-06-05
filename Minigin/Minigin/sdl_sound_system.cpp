@@ -81,7 +81,7 @@ void dae::sdl_sound_system::AddAudioClip(std::string path)
 	}
 	else
 	{
-		cout << "not accepted format." << endl;
+		cout << "Not accepted format. \n";
 	}
 }
 
@@ -114,7 +114,7 @@ void  dae::sdl_sound_system::AddMusicClip(std::string path, bool loop)
 	}
 	else
 	{
-		std::cout << "not accepted format.";
+		cout << "Not accepted format. \n";
 	}
 }
 
@@ -152,7 +152,7 @@ void dae::sdl_sound_system::Update()
 				}*/
 
 	}
-	std::cout << "ended";
+	printf("Ended \n");
 }
 
 
