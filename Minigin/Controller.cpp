@@ -58,7 +58,8 @@ void dae::Controller::ControllerImpl::Update()
 #pragma region Gamepad
 bool dae::Controller::ControllerImpl::IsDownThisFrame(unsigned int button) const
 {
-	return  buttonPressedThisFrame & static_cast<int>(button);
+	
+	return ((m_CurrentState.Gamepad.wButtons & static_cast<int>(button)) != 0);
 }
 
 bool dae::Controller::ControllerImpl::IsUpThisFrame(unsigned int button) const
@@ -68,6 +69,6 @@ bool dae::Controller::ControllerImpl::IsUpThisFrame(unsigned int button) const
 
 bool dae::Controller::ControllerImpl::IsPressed(unsigned int button) const
 {
-	return  ((m_CurrentState.Gamepad.wButtons & static_cast<int>(button)) != 0);
+	return  buttonPressedThisFrame & static_cast<int>(button);
 }
 #pragma endregion

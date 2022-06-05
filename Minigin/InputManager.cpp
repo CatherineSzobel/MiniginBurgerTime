@@ -69,10 +69,29 @@ void dae::InputManager::ProcessGamepadInput()
 		controller->Update();
 		for (auto& command : m_GamepadButtons)
 		{
-			if (controller->IsDown(command.first))
+			if (command.second == InputState::down)
 			{
-				command.second.get()->Execute();
-				break;
+				if (controller->IsDown(command.first.first))
+				{
+					command.first.second.get()->Execute();
+					break;
+				}
+			}
+			if (command.second == InputState::pressed)
+			{
+				if (controller->IsPressed(command.first.first))
+				{
+					command.first.second.get()->Execute();
+					break;
+				}
+			}
+			if (command.second == InputState::released)
+			{
+				if (controller->IsUp(command.first.first))
+				{
+					command.first.second.get()->Execute();
+					break;
+				}
 			}
 		}
 	}
@@ -98,11 +117,9 @@ void dae::InputManager::ProcessKeyboardInput(SDL_Event& e)
 		break;
 
 	case SDL_KEYUP:
+		m_PreviousKey = false;
 		for (auto& command : m_KeyButtons)
 		{
-
-			m_PreviousKey = false;
-
 			if (command.second == InputState::released)
 			{
 				if (e.key.keysym.sym == command.first.first)
@@ -130,9 +147,10 @@ void dae::InputManager::ProcessKeyboardInput(SDL_Event& e)
 	}
 }
 
-void dae::InputManager::BindGamepadCommand(GamepadButton button, InputState, Command* command)
+void dae::InputManager::BindGamepadCommand(GamepadButton button, InputState state, Command* command)
 {
-	m_GamepadButtons.emplace(button, std::unique_ptr<Command>(command));
+	m_GamepadButtons[std::make_pair(button, std::unique_ptr<Command>(command))] = state;
+	//m_GamepadButtons.emplace(button, std::unique_ptr<Command>(command));
 }
 
 void dae::InputManager::BindKeyboardCommand(SDL_Keycode keyboard, InputState state, Command* command)

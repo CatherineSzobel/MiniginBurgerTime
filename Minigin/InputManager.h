@@ -35,7 +35,8 @@ namespace dae
 
 		//XINPUT_KEYSTROKE m_CurrentKeyStroke[XUSER_MAX_COUNT];
 
-		using ControllerCommandsMap = std::map<GamepadButton, std::unique_ptr<Command>>;
+		using ControllerCommandsMap = std::map<std::pair<GamepadButton, std::unique_ptr<Command>>, InputState>;
+		//	using ControllerCommandsMap = std::map<GamepadButton, std::unique_ptr<Command>>;
 		ControllerCommandsMap m_GamepadButtons{};
 
 		using KeyboardCommandsMap = std::map<std::pair<SDL_Keycode, std::unique_ptr<Command>>, InputState>;
@@ -45,7 +46,7 @@ namespace dae
 		std::vector<std::unique_ptr<Controller>> m_pControllers{};
 		bool m_EnableKeyboard{ false };
 		int	m_CurrentAmountOfPlayers{ 0 };
-		bool m_PreviousKey{false};
+		bool m_PreviousKey{ false };
 	};
 
 }

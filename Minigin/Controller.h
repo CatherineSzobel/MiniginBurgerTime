@@ -34,8 +34,6 @@ namespace dae
 			WORD buttonPressedThisFrame{ 0 };
 			WORD buttonReleasedThisFrame{ 0 };
 
-			SHORT keyPressedThisFrame{ 0 };
-			SHORT keyReleasedThisFrame{ 0 };
 		};
 
 	public:
@@ -55,8 +53,6 @@ namespace dae
 		bool IsPressed(GamepadButton button) const;
 
 	private:
-		//void DeadzoneLeftThumbstick();
-		//void DeadzoneRightThumbStick();
 
 		class ControllerImpl;
 		ControllerImpl* pImpl;

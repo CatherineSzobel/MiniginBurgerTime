@@ -14,6 +14,7 @@ namespace dae
 		void FixedUpdate(float deltaTime) override;
 		void Render() const override;
 		void Initialize();
+
 		void SetParent(GameObject* parent) { m_Parent = parent; }
 		GameObject* GetParent() const { return m_Parent; }
 		Transform GetTransform() const { return m_Transform;}
